@@ -100,14 +100,24 @@ The tests call the repository and the service directly, and speak real HTTP to t
    - set `ctx.status(201)`, because Created is the honest code for a successful POST;
    - answer the new ticket as JSON.
 5. Follow one request in your head: request -> matched route -> your lambda -> service -> repository -> JSON response.
-6. If a route test answers 404 where you expected 200, no route matched. Check the path spelling, including the `{id}` braces.
+
+<details><summary>Hint</summary>
+
+If a route test answers 404 where you expected 200, no route matched. Check the path spelling, including the `{id}` braces.
+
+</details>
 
 ### Task 4: the failure path
 
 1. Run the tests first and look at task 4. Right now a missing ticket answers 500 `Server Error`, because `NotFoundException` reaches Javalin unhandled.
 2. Register `config.routes.exception(NotFoundException.class, (e, ctx) -> ...)`. Set status 404, and answer `ctx.json(Map.of("error", e.getMessage()))`.
 3. Register the same shape for `IllegalArgumentException`, with status 400: a blank title is the caller's mistake, not the server's.
-4. If task 4 still answers 500, register the handlers inside the same `Javalin.create(config -> ...)` block as the routes.
+
+<details><summary>Hint</summary>
+
+If task 4 still answers 500, register the handlers inside the same `Javalin.create(config -> ...)` block as the routes.
+
+</details>
 
 ### Task 5: modernize the health route
 
