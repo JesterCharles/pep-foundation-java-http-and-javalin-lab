@@ -1,7 +1,6 @@
 package exercise.hidden;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -45,12 +44,6 @@ class HeldOutTests {
         } catch (Exception notJson) {
             return null;
         }
-    }
-
-    @Test
-    void task1FindUnknownId() {
-        InMemoryTicketRepository repository = new InMemoryTicketRepository();
-        assertNull(repository.find("T-9"), "Task 1: find of an unknown id answers null, as the interface says");
     }
 
     @Test

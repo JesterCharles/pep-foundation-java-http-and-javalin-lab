@@ -3,6 +3,7 @@ package exercise;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -62,7 +63,8 @@ class VisibleTests {
                 () -> assertEquals(jam, repository.save(jam), "Task 1: save returns the stored ticket"),
                 () -> assertEquals(vpn, repository.save(vpn), "Task 1: save returns the stored ticket"),
                 () -> assertEquals(jam, repository.find("T-1"), "Task 1: find(\"T-1\")"),
-                () -> assertEquals(List.of(jam, vpn), repository.all(), "Task 1: all(), oldest first"));
+                () -> assertEquals(List.of(jam, vpn), repository.all(), "Task 1: all(), oldest first"),
+                () -> assertNull(repository.find("T-9"), "Task 1: find of an unknown id answers null, as the interface says"));
     }
 
     @Test
