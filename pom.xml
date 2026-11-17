@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>pep.javafoundations</groupId>
+  <artifactId>http-javalin-lab</artifactId>
+  <version>1.0.0</version>
+
+  <!-- JUnit and plugin versions match the Exa Java scaffold, so the offline
+       grader image (evolv/jdk17-maven) already has them cached. -->
+  <properties>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <!-- javalin-bundle = Javalin + Jackson JSON + a simple logger. Javalin 7
+         runs on Java 17. This dependency is not part of the scaffold: the
+         Dockerfile warms it into the local Run Tests image, but the server
+         grader image may not have it cached. -->
+    <dependency>
+      <groupId>io.javalin</groupId>
+      <artifactId>javalin-bundle</artifactId>
+      <version>7.2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.11.3</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.3.1</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.5.2</version>
+        <!-- Javalin's startup log goes to target/surefire-reports, so a passing
+             mvn -q test prints nothing. -->
+        <configuration>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+        </configuration>
+      </plugin>
+      <!-- Optional: mvn -q compile exec:java starts DeskApi.main on port 7070
+           with Javalin on the classpath. Not bound to any phase, so Run Tests
+           and the grader never use it. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.6.4</version>
+        <configuration>
+          <mainClass>deskapi.DeskApi</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
