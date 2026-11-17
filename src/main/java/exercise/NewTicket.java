@@ -1,4 +1,4 @@
-package deskapi;
+package exercise;
 
 /**
  * The JSON body of POST /tickets, for example {"title": "Printer jam"}.

@@ -1,4 +1,4 @@
-package deskapi;
+package exercise;
 
 /**
  * Thrown when a ticket id does not exist. Complete. It is unchecked

@@ -1,4 +1,4 @@
-package deskapi;
+package exercise;
 
 /**
  * One ticket as the API sends and stores it. Complete - a record fits here:

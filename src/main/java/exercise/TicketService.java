@@ -1,4 +1,4 @@
-package deskapi;
+package exercise;
 
 import java.util.List;
 
