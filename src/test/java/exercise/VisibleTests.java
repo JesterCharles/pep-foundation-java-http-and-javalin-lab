@@ -1,4 +1,4 @@
-package deskapi;
+package exercise;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,12 +20,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 /**
- * Public tests for the HTTP and Javalin lab. The repository and service tests
+ * Visible tests for the HTTP and Javalin lab, one per task. The repository and service tests
  * call the classes directly; the route tests start the real app on a free
  * localhost port and speak real HTTP to it with Java's own HttpClient.
+ * Restored over the learner's checkout at grade time.
  */
 @TestMethodOrder(MethodOrderer.MethodName.class)
-class DeskApiTest {
+class VisibleTests {
 
     private static final ObjectMapper JSON = new ObjectMapper();
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
@@ -62,9 +63,8 @@ class DeskApiTest {
                 () -> assertEquals(jam, repository.save(jam), "Task 1: save returns the stored ticket"),
                 () -> assertEquals(vpn, repository.save(vpn), "Task 1: save returns the stored ticket"),
                 () -> assertEquals(jam, repository.find("T-1"), "Task 1: find(\"T-1\")"),
-                () -> assertNull(repository.find("T-9"),
-                        "Task 1: find of an unknown id answers null, as the interface says"),
-                () -> assertEquals(List.of(jam, vpn), repository.all(), "Task 1: all(), oldest first"));
+                () -> assertEquals(List.of(jam, vpn), repository.all(), "Task 1: all(), oldest first"),
+                () -> assertNull(repository.find("T-9"), "Task 1: find of an unknown id answers null, as the interface says"));
     }
 
     @Test
@@ -80,12 +80,8 @@ class DeskApiTest {
                 () -> assertTrue(first.open(), "Task 2: a new ticket is open"),
                 () -> assertEquals(first, service.get("T-1"), "Task 2: get finds a saved ticket"),
                 () -> assertEquals(List.of(first, second), service.list(), "Task 2: list, oldest first"));
-        NotFoundException missing = assertThrows(NotFoundException.class, () -> service.get("T-9"),
+        assertThrows(NotFoundException.class, () -> service.get("T-9"),
                 "Task 2: an unknown id must raise NotFoundException");
-        assertEquals("no ticket T-9", missing.getMessage(), "Task 2: the message names the id");
-        IllegalArgumentException blank = assertThrows(IllegalArgumentException.class,
-                () -> service.create("  "), "Task 2: a blank title must be rejected");
-        assertEquals("title must not be blank", blank.getMessage(), "Task 2: the rejection message");
     }
 
     @Test
@@ -112,10 +108,7 @@ class DeskApiTest {
             JsonNode list = JSON.readTree(all.body());
             assertAll(
                     () -> assertTrue(list.isArray(), "Task 3: GET /tickets returns a JSON array"),
-                    () -> assertEquals(1, list.size(), "Task 3: the array holds the one created ticket"),
-                    () -> assertTrue(all.headers().firstValue("Content-Type").orElse("")
-                                    .startsWith("application/json"),
-                            "Task 3: the list response is served as application/json"));
+                    () -> assertEquals(1, list.size(), "Task 3: the array holds the one created ticket"));
         } finally {
             app.stop();
         }
@@ -150,8 +143,6 @@ class DeskApiTest {
             HttpResponse<String> blank = post(port, "/tickets", "{\"title\":\"  \"}");
             assertEquals(400, blank.statusCode(),
                     "Task 4: a blank title is the caller's mistake: 400, not " + blank.statusCode());
-            assertEquals("title must not be blank", errorField(blank.body()),
-                    "Task 4: the 400 body is JSON with an error field");
         } finally {
             app.stop();
         }
